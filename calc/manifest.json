@@ -1,0 +1,7 @@
+{
+  "id": "calc",
+  "icon": "http://findicons.com/files/icons/1363/clipper_system_2/128/calculator.png",
+  "title": "Calculator",
+  "description": "Ancestor & Descendant calculator and statistics.",
+  "url": "http://localhost:5000/?pid={pid}&token={token}"
+}

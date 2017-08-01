@@ -1,0 +1,7 @@
+{
+  "id": "dna",
+  "icon": "https://cdn4.iconfinder.com/data/icons/medicons-2/512/dna_helix-128.png",
+  "title": "DNA",
+  "description": "View DNA test resutls and discover DNA cousins.",
+  "url": "http://localhost:5000/?pid={pid}&token={token}"
+}

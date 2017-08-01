@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+	<head>
+	  <meta charset="utf-8">
+	  <title>Generation Calc</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+
+		<div class="container">
+			<h1>Generation Calculator</h1>
+			<h2>Ancestors</h2>
+			<p>Ancestors: <span class="ancestors"></span></p>
+			<p>Ancestor Generations: <span class="ancestorgens"></span></p>
+			<h2>Descendants</h2>
+			<p>Descendants: <span class="descendants"></span></p>
+			<p>Descendant Generations: <span class="descendantgens"></span></p>
+			<p>Male: <span class="male"></span></p>
+			<p>Female: <span class="female"></span></p>
+		</div>
+
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+		<script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+		<script src="https://unpkg.com/fs-js-lite@2.x/dist/FamilySearch.min.js"></script>
+
+		<script type="text/javascript">
+		var params = getQueryParams();
+		var fs = new FamilySearch({ accessToken: params.token, environment: 'beta' });
+		var ancestors = 0, ancestorgens = 0, descendants = 0, descendantgens = 0, male= 0, female = 0;
+
+		// Get all ancestors
+		getAncestry(params.pid, 0);
+		function getAncestry(pid, generations) {
+			fs.get('/platform/tree/ancestry/?person='+pid+'&generations=8', function(error, response) {
+				console.log(response.throttled);
+				let people = response.data.persons;
+				ancestors = ancestors + parseInt(people.length);
+				$('.ancestors').text(ancestors);
+				$('.ancestorgens').text(generations);
+
+					for (var i=0; i<people.length; i++) {
+						if (people[i].display.ascendancyNumber >= 256) {
+							// Stop after 16 generations
+							if (generations < 16) {
+								console.log(people[i].display.ascendancyNumber, people[i].display.name, people[i].display.lifeSpan);
+								getAncestry(people[i].id, generations + 8);
+							}
+						}
+					}
+			});
+		}
+
+		// Get Query parameters
+		function getQueryParams() {
+		  var vars = [], hash;
+		  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		  for(var i = 0; i < hashes.length; i++) {
+		      hash = hashes[i].split('=');
+		      vars.push(hash[0]);
+		      vars[hash[0]] = hash[1];
+		  }
+		  return vars;
+		}
+		</script>
+	</body>
+</html>
