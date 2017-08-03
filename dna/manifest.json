@@ -2,6 +2,9 @@
   "id": "dna",
   "icon": "https://cdn4.iconfinder.com/data/icons/medicons-2/512/dna_helix-128.png",
   "title": "DNA",
-  "description": "View DNA test resutls and discover DNA cousins.",
-  "url": "http://localhost:5000/?pid={pid}&token={token}"
+  "description": "View DNA test results and discover DNA cousins.",
+  "company": "DNA Company",
+  "phone": "800-555-1212",
+  "email": "info@dnacompany.com",
+  "url": "https://misbach.github.io/tabs/dna/index.html?pid={pid}&token={token}"
 }

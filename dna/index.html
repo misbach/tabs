@@ -22,7 +22,7 @@
 
 		<div class="cousins container" style="display: none;">
 			<h1>DNA Cousin matches for <span class="user"></span></h1>
-			<p>Based on your DNA test results we've identified some Family Tree users who may be your genetic cousins.</p>
+			<p>Based on your DNA test results we've identified some Family Tree users who may be your genetic cousins and share <span class="ancestor"></span> as a common ancestor.</p>
 			<ul class="cousin-list"></ul>
 		</div>
 
@@ -58,6 +58,10 @@
 				fs.get('/platform/tree/persons/'+params.pid, function(error, response) {
 					var person = response.data.persons[0];
 					console.log(person);
+					// If person is LIVING display a message
+					if (person.living == true) $('.cousins').text("Sorry, this tab doesn't work with living persons.");
+
+					$('.ancestor').text(person.display.name)
 					for (var i=0; i<person.evidence.length; i++) {
 						contributors.push(person.evidence[i].attribution.contributor.resourceId);
 					}
