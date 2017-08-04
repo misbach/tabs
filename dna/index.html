@@ -1,110 +1,120 @@
 <!doctype html>
 <html lang="en">
-	<head>
-	  <meta charset="utf-8">
-	  <title>DNA</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-		<style type="text/css">
-			.avatar { border-radius: 50%; border: solid; border-width: 3px; border-color: #9e9b9b; }
-			li { display: flex; margin-bottom: 20px; }
-			.name { font-size: 30px; padding-left: 10px; padding-top: 5px; }
-			.email { padding-left: 10px; padding-top: 21px; color: #cccccc; }
-		</style>
-	</head>
-	<body>
+  <head>
+    <meta charset="utf-8">
+    <title>DNA</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <style type="text/css">
+      .avatar { border-radius: 50%; border: solid; border-width: 3px; border-color: #9e9b9b; }
+      li { display: flex; margin-bottom: 20px; }
+      .name { font-size: 30px; padding-left: 10px; padding-top: 5px; }
+      .email { padding-left: 10px; padding-top: 21px; color: #cccccc; }
+    </style>
+  </head>
+  <body>
 
-		<div class="dna container" style="display: none;">
-			<h1>Ancestry Composition for <span class="user"></span></h1>
-			<p>Your genome tells the unique story of your ancestry: where your ancestors lived, when they contributed to your family tree, and how their DNA was passed down to you through your parents. For more information about your results, see Frequently Asked Questions.</p>
-			<img src="https://static1.squarespace.com/static/548fddcde4b0bbd467f73559/t/56ce8bf0ab48de32d747ba4b/1456376841691/Ancestry+Comp" width="90%">
-			<img src="http://ww2.kqed.org/futureofyou/wp-content/uploads/sites/13/2015/10/qDZjMl9WskAOEMsDU6M2BTlV1t_13PWBQqqsyieIlNo-785x600.png" width="90%">
-		</div>
+    <div class="dna container" style="display: none;">
+      <h1>Ancestry Composition for <span class="user"></span></h1>
+      <p>Your genome tells the unique story of your ancestry: where your ancestors lived, when they contributed to your family tree, and how their DNA was passed down to you through your parents. For more information about your results, see Frequently Asked Questions.</p>
+      <img src="https://static1.squarespace.com/static/548fddcde4b0bbd467f73559/t/56ce8bf0ab48de32d747ba4b/1456376841691/Ancestry+Comp" width="90%">
+      <img src="http://ww2.kqed.org/futureofyou/wp-content/uploads/sites/13/2015/10/qDZjMl9WskAOEMsDU6M2BTlV1t_13PWBQqqsyieIlNo-785x600.png" width="90%">
+    </div>
 
-		<div class="cousins container" style="display: none;">
-			<h1>DNA Cousin matches for <span class="user"></span></h1>
-			<p>Based on your DNA test results we've identified some Family Tree users who may be your genetic cousins and share <span class="ancestor"></span> as a common ancestor.</p>
-			<ul class="cousin-list"></ul>
-		</div>
+    <div class="cousins container" style="display: none;">
+      <h1>DNA Cousin matches for <span class="user"></span></h1>
+      <p>Based on your DNA test results we've identified some Family Tree users who may be your genetic cousins and share <span class="ancestor"></span> as a common ancestor.</p>
+      <ul class="cousin-list"></ul>
+    </div>
 
-		<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-		<script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-		<script src="https://unpkg.com/fs-js-lite@2.x/dist/FamilySearch.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/fs-js-lite@2.x/dist/FamilySearch.min.js"></script>
 
-		<script type="text/javascript">
-		var params = getQueryParams();
-		var fs = new FamilySearch({ accessToken: params.token, environment: 'production' });
+    <script type="text/javascript">
+    var params = getQueryParams();
+    var fs = new FamilySearch({ accessToken: params.token, environment: 'production' });
 
-		// Get User
-		fs.get('/platform/users/current', function(error, response) {
-			fs.user = response.data.users[0];
-			console.log(fs.user);
-			$('.user').text(fs.user.displayName);
+    // Get User
+    fs.get('/platform/users/current', function(error, response) {
+      fs.user = response.data.users[0];
+      // console.log(fs.user);
+      $('.user').text(fs.user.displayName);
 
-			// ------------
-			// Show DNA Results
-			// ------------
-			if (fs.user.personId == params.pid) {
-				$('.dna').show();
+      // ------------
+      // Show DNA Results
+      // ------------
+      if (fs.user.personId == params.pid) {
+        $('.dna').show();
 
-			// ------------
-			// Show Cousins
-			// ------------
-			} else {
-				$('.cousins').show();
+      // ------------
+      // Show Cousins
+      // ------------
+      } else {
+        $('.cousins').show();
 
-				// Get all contributors
-				var contributors = [];
-				fs.get('/platform/tree/persons/'+params.pid, function(error, response) {
-					var person = response.data.persons[0];
-					console.log(person);
-					// If person is LIVING display a message
-					if (person.living == true) $('.cousins').text("Sorry, this tab doesn't work with living persons.");
+        // Get all contributors
+        var contributors = [];
+        fs.get('/platform/tree/persons/'+params.pid, function(error, response) {
+          var person = response.data.persons[0];
+          // console.log(person);
 
-					$('.ancestor').text(person.display.name)
-					for (var i=0; i<person.evidence.length; i++) {
-						contributors.push(person.evidence[i].attribution.contributor.resourceId);
-					}
-					for (var i=0; i<person.facts.length; i++) {
-						contributors.push(person.facts[i].attribution.contributor.resourceId);
-					}
-					for (var i=0; i<person.sources.length; i++) {
-						contributors.push(person.sources[i].attribution.contributor.resourceId);
-					}
-					for (var i=0; i<person.names.length; i++) {
-						contributors.push(person.names[i].attribution.contributor.resourceId);
-					}
-					// Get Unique contributors
-					var unique = new Set(contributors);
+          // If person is LIVING display a message
+          if (person.living == true) $('.cousins').text("Sorry, this tab doesn't work with living persons.");
 
-					// Remove current user, and data admin users
-					unique.delete("MMMM-MM5");
-					unique.delete("MMMM-MM8");
-					unique.delete(fs.user.treeUserId);
+          $('.ancestor').text(person.display.name)
 
-  				// Get contributor info
-					for (var i = unique.values(); val=i.next().value; ) {
-    				fs.get('/platform/users/agents/'+val, function(error, response) {
-    					let name = response.data.agents[0].accounts[0].accountName;
-    					let email = (response.data.agents[0].emails) ? response.data.agents[0].emails[0].resource.substring(7,200) : "private";
-    					$('.cousin-list').append('<li><img class="avatar" src="https://dummyimage.com/48x48/D8D8D6/fff&text='+name.substring(0,2)+'"><div class="name">'+name+'</div><div class="email">'+email+'</div></li>');
-    				});
-					}
-				});
-			}
-		});
+          // Get contributor IDs
+          for (var i=0; i<person.evidence.length; i++) {
+            contributors.push(person.evidence[i].attribution.contributor.resourceId);
+          }
+          for (var i=0; i<person.facts.length; i++) {
+            contributors.push(person.facts[i].attribution.contributor.resourceId);
+          }
+          for (var i=0; i<person.sources.length; i++) {
+            contributors.push(person.sources[i].attribution.contributor.resourceId);
+          }
+          for (var i=0; i<person.names.length; i++) {
+            contributors.push(person.names[i].attribution.contributor.resourceId);
+          }
+          // Remove duplicates
+          var unique = new Set(contributors);
 
-		// Get Query parameters
-		function getQueryParams() {
-		  var vars = [], hash;
-		  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-		  for(var i = 0; i < hashes.length; i++) {
-		      hash = hashes[i].split('=');
-		      vars.push(hash[0]);
-		      vars[hash[0]] = hash[1];
-		  }
-		  return vars;
-		}
-		</script>
-	</body>
+          // Remove current user, and data admin users
+          unique.delete("MMMM-MM5");
+          unique.delete("MMMM-MM6");
+          unique.delete("MMMM-MM8");
+          unique.delete(fs.user.treeUserId);
+          // console.log(unique, fs.user);
+
+          // Get contributor info
+          for (var i = unique.values(); val=i.next().value; ) {
+            fs.get('/platform/users/agents/'+val, function(error, response) {
+              let id = response.data.agents[0].id;
+              let name = response.data.agents[0].accounts[0].accountName;
+              let email = (response.data.agents[0].emails) ? response.data.agents[0].emails[0].resource.substring(7,200) : "private";
+
+							// Weird case where logged in user have multiple contributor IDs so need to check if CIS IDs match
+              if (id == fs.user.id) return;
+
+              $('.cousin-list').append('<li><img class="avatar" src="https://dummyimage.com/48x48/D8D8D6/fff&text='+name.substring(0,2)+'"><div class="name">'+name+'</div><div class="email">'+email+'</div></li>');
+            });
+          }
+        });
+      }
+    });
+
+    // Get Query parameters
+    function getQueryParams() {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for(var i = 0; i < hashes.length; i++) {
+          hash = hashes[i].split('=');
+          vars.push(hash[0]);
+          vars[hash[0]] = hash[1];
+      }
+      return vars;
+    }
+    </script>
+  </body>
 </html>
