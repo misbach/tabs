@@ -12,10 +12,14 @@
 		<div class="container">
 			<h1>Generation Calculator</h1>
 			<h2>Ancestors</h2>
+			<button id="ancestorsBtn" onclick="getAncestry(params.pid, 0);">Calculate Ancestors</button>
 			<p>Ancestors: <span class="ancestors"></span></p>
 			<p>Ancestor Generations: <span class="ancestorgens"></span></p>
+			<p>Continuation Lines: <span class="continuationLines"></span></p>
 			<h2>Descendants</h2>
+			<button id="descendantsBtn" onclick="getDescendants(params.pid, 1);">Calculate Descendants</button>
 			<p>Descendants: <span class="descendants"></span></p>
+			<p>Descendant Spouses: <span class="descendantSpouses"></span></p>
 			<p>Descendant Generations: <span class="descendantgens"></span></p>
 			<p>Male: <span class="male"></span></p>
 			<p>Female: <span class="female"></span></p>
@@ -29,28 +33,82 @@
 		<script type="text/javascript">
 		var params = getQueryParams();
 		var fs = new FamilySearch({ accessToken: params.token, environment: 'beta' });
-		var ancestors = 0, ancestorgens = 0, descendants = 0, descendantgens = 0, male= 0, female = 0;
+		var ancestors = 0, continuationLines = 0, ancestorgens = 0, descendants = 0, descendantgens = 0, descendantSpouses = 0, male= 0, female = 0;
 
-		// Get all ancestors
-		getAncestry(params.pid, 0);
+		// Calculate Ancestors
+		let continues = false;
 		function getAncestry(pid, generations) {
+			$('#ancestorsBtn').remove();
+
 			fs.get('/platform/tree/ancestry/?person='+pid+'&generations=8', function(error, response) {
 				console.log(response.throttled);
 				let people = response.data.persons;
 				ancestors = ancestors + parseInt(people.length);
 				$('.ancestors').text(ancestors);
 				$('.ancestorgens').text(generations);
+				$('.continuationLines').text(continuationLines);
 
 					for (var i=0; i<people.length; i++) {
 						if (people[i].display.ascendancyNumber >= 256) {
+							continues = true;
 							// Stop after 16 generations
 							if (generations < 16) {
 								console.log(people[i].display.ascendancyNumber, people[i].display.name, people[i].display.lifeSpan);
 								getAncestry(people[i].id, generations + 8);
-							}
+							} 
+
+							// Count number of lines that continues
+							if (generations == 16) continuationLines++;
 						}
 					}
+
+					// Calculate how many generations
+					if (continues == false) {
+						$('.ancestorgens').text(Math.floor(Math.log2(people.length))+1);
+					}
 			});
+		}
+
+		// Calculate Descendants
+		function getDescendants(pid, generations){
+			$('#descendantsBtn').remove();
+
+			fs.get('/platform/tree/descendancy/?person='+pid+'&generations=2', function(error, response) {
+				let people = response.data.persons;
+
+				for (var i=0; i<people.length; i++) {
+					console.log(people[i].display.descendancyNumber, people[i].display.name)
+					let descendancyNumber = people[i].display.descendancyNumber;
+					let generation = (descendancyNumber.match(/\./g)||[]).length + 1;
+
+					// Don't count spouses as descendants
+					if (descendancyNumber.split('S').length == 1) {
+						// Don't count starting person
+						if (descendancyNumber != 1) {
+							descendants ++;
+							if (people[i].display.gender == "Male") male++;
+							if (people[i].display.gender == "Female") female++;
+						}
+						// Continue if we are in 3rd generation
+						if (generation == 3) {
+							getDescendants(people[i].id, generations + generation);
+						}
+					} else {
+						// Don't count wives of starting person
+						if (descendancyNumber.split("-S").length > 1 && generation > 1) {
+							console.log("spouse of #1");
+							descendantSpouses ++;
+						}
+					}
+
+					// Update UI
+					$('.descendants').text(descendants);
+					$('.descendantSpouses').text(descendantSpouses);
+					$('.descendantgens').text(generations);
+					$('.male').text(male);
+					$('.female').text(female);
+				}
+			})
 		}
 
 		// Get Query parameters
