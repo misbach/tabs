@@ -14,13 +14,13 @@
 			<h2>Ancestors</h2>
 			<button id="ancestorsBtn" onclick="getAncestry(params.pid, 0);">Calculate Ancestors</button>
 			<p>Ancestors: <span class="ancestors"></span></p>
-			<p>Ancestor Generations: <span class="ancestorgens"></span></p>
+			<p>Generations: <span class="ancestorgens"></span></p>
 			<p>Continuation Lines: <span class="continuationLines"></span></p>
 			<h2>Descendants</h2>
 			<button id="descendantsBtn" onclick="getDescendants(params.pid, 1);">Calculate Descendants</button>
 			<p>Descendants: <span class="descendants"></span></p>
 			<p>Descendant Spouses: <span class="descendantSpouses"></span></p>
-			<p>Descendant Generations: <span class="descendantgens"></span></p>
+			<p>Generations: <span class="descendantgens"></span></p>
 			<p>Male: <span class="male"></span></p>
 			<p>Female: <span class="female"></span></p>
 		</div>
@@ -44,7 +44,7 @@
 				console.log(response.throttled);
 				let people = response.data.persons;
 				ancestors = ancestors + parseInt(people.length);
-				$('.ancestors').text(ancestors);
+				$('.ancestors').text(ancestors.toLocaleString());
 				$('.ancestorgens').text(generations);
 				$('.continuationLines').text(continuationLines);
 
@@ -53,7 +53,7 @@
 							continues = true;
 							// Stop after 16 generations
 							if (generations < 16) {
-								console.log(people[i].display.ascendancyNumber, people[i].display.name, people[i].display.lifeSpan);
+								// console.log(people[i].display.ascendancyNumber, people[i].display.name, people[i].display.lifeSpan);
 								getAncestry(people[i].id, generations + 8);
 							} 
 
@@ -77,7 +77,7 @@
 				let people = response.data.persons;
 
 				for (var i=0; i<people.length; i++) {
-					console.log(people[i].display.descendancyNumber, people[i].display.name)
+					// console.log(people[i].display.descendancyNumber, people[i].display.name)
 					let descendancyNumber = people[i].display.descendancyNumber;
 					let generation = (descendancyNumber.match(/\./g)||[]).length + 1;
 
@@ -96,13 +96,12 @@
 					} else {
 						// Don't count wives of starting person
 						if (descendancyNumber.split("-S").length > 1 && generation > 1) {
-							console.log("spouse of #1");
 							descendantSpouses ++;
 						}
 					}
 
 					// Update UI
-					$('.descendants').text(descendants);
+					$('.descendants').text(descendants.toLocaleString());
 					$('.descendantSpouses').text(descendantSpouses);
 					$('.descendantgens').text(generations);
 					$('.male').text(male);
