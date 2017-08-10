@@ -1,6 +1,6 @@
 {
   "id": "calc",
-  "icon": "http://findicons.com/files/icons/1363/clipper_system_2/128/calculator.png",
+  "icon": "https://raw.githubusercontent.com/misbach/tabs/master/calc/calc.png",
   "title": "Calculator",
   "description": "Ancestor & Descendant calculator and statistics",
   "company": "Matt Misbach",
