@@ -6,5 +6,6 @@
   "company": "DNA Company",
   "phone": "800-555-1212",
   "email": "info@dnacompany.com",
-  "url": "https://misbach.github.io/tabs/dna/index.html?pid={pid}&token={token}"
+  "url": "https://misbach.github.io/tabs/dna/index.html?pid={pid}&token={token}",
+  "support_url": "https://dnacompany.com"
 }

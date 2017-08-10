@@ -35,6 +35,10 @@
 		var fs = new FamilySearch({ accessToken: params.token, environment: 'production' });
 		var ancestors = 0, continuationLines = 0, ancestorgens = 0, descendants = 0, descendantgens = 0, descendantSpouses = 0, male= 0, female = 0;
 
+		// TODO:
+		// Number of people who have multiple marriages (by divorce or polygammy)
+		// Avg number of kids per couple
+
 		// Calculate Ancestors
 		let continues = false;
 		function getAncestry(pid, generations) {
