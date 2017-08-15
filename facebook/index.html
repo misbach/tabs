@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+	<head>
+	  <meta charset="utf-8">
+	  <title>Generation Calc</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+
+		<div class="container">
+			<h1>Facebook</h1>
+			<div class="linkup">
+				<p>Link up this person to their memorialized facebook page.</p>
+				<input class="url" type="text" name="url" />
+				<button id="" onclick="saveURL();">Save URL</button>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+		<script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+		<script src="https://unpkg.com/fs-js-lite@2.x/dist/FamilySearch.min.js"></script>
+
+		<script type="text/javascript">
+		var params = getQueryParams();
+		var memorial = JSON.parse(localStorage.getItem(params.pid));
+		console.log(memorial);
+		if (memorial) {
+			console.log(memorial.url);
+			window.location.href = memorial.url;
+		}
+
+		function saveURL() {
+			let url = $('.url').val();
+			localStorage.setItem(params.pid, JSON.stringify({url: url}));
+		}
+
+		// Get Query parameters
+		function getQueryParams() {
+		  var vars = [], hash;
+		  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		  for(var i = 0; i < hashes.length; i++) {
+		      hash = hashes[i].split('=');
+		      vars.push(hash[0]);
+		      vars[hash[0]] = hash[1];
+		  }
+		  return vars;
+		}
+		</script>
+	</body>
+</html>

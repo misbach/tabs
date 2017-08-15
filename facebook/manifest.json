@@ -1,0 +1,11 @@
+{
+  "id": "facebook",
+  "icon": "https://cdn0.iconfinder.com/data/icons/socialnetworkspro/128/Facebook.png",
+  "title": "Facebook",
+  "description": "Memorialized person on facebook",
+  "company": "Facebook",
+  "phone": "800-555-1212",
+  "email": "info@facebook.com",
+  "url": "https://misbach.github.io/tabs/facebook/index.html?pid={pid}&token={token}",
+  "support_url": "mailto:info@facebook.com"
+}
