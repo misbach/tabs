@@ -1,11 +1,11 @@
 {
   "id": "search",
-  "icon": "http://icons.veryicon.com/128/System/Blue%20Bits/globe%20search.png",
-  "title": "Search",
-  "description": "Memorialized person on facebook",
-  "company": "Tabs R Us",
-  "phone": "800-555-1212",
-  "email": "info@tabs-r-us.com",
+  "icon": "https://misbach.github.io/tabs/search/logos/icon.png",
+  "title": "Search Records",
+  "description": "Search for your ancestor in popular historical records",
+  "company": "FamilySearch",
+  "phone": "1-866-406-1830",
+  "email": "help@familysearch.org",
   "url": "https://misbach.github.io/tabs/search/index.html?pid={pid}&token={token}",
-  "support_url": "mailto:info@tabs-r-us.com"
+  "support_url": "https://familysearch.org/ask/help"
 }
