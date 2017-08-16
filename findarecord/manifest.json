@@ -1,0 +1,11 @@
+{
+  "id": "findarecord",
+  "icon": "https://www.findarecord.com/assets/img/logos/50x50-white-orange.png",
+  "title": "Find A Record",
+  "description": "Discover research opportinuties",
+  "company": "Find A Record",
+  "phone": "800-555-1212",
+  "email": "info@findarecord.com",
+  "url": "https://www.findarecord.com/en/research/familysearch/opportunities/{pid}",
+  "support_url": "mailto:info@findarecord.com"
+}
