@@ -9,6 +9,7 @@
 			ul { list-style: none; display: flex; flex-wrap: wrap; margin-top: 50px; }
 			li { margin-bottom: 30px; margin-right: 100px; }
 			.company { color: gray; font-size: 12px; }
+			.free, .french { display: none; }
 		</style>
 	</head>
 	<body>
@@ -18,10 +19,11 @@
 			<p>The following links will take you to the website with the search fields pre-filled out with the information for <span class="person"></span></p>
 			<ul>
 				<li><a class="familysearch" href="" target="_blank"><img src="./logos/familysearch.png"></a><div class="company">FamilySearch</div></li>
-				<li><a class="myheritage" href="" target="_blank"><img src="./logos/myheritage.jpg"></a><div class="company">MyHeritage</div></li>
-				<li><a class="ancestry" href="" target="_blank"><img src="./logos/ancestry.jpg"></a><div class="company">Ancestry</div></li>
-				<li><a class="findmypast" href="" target="_blank"><img src="./logos/findmypast.jpg"></a><div class="company">Findmypast</div></li>
-				<li><a class="geneanet" href="" target="_blank"><img src="./logos/geneanet.jpg"></a><div class="company">geneanet</div></li>
+				<li><a class="myheritage" href="" target="_blank"><img src="./logos/myheritage.jpg"></a><div class="company">MyHeritage<span class="free">, <a href="https://familysearch.org/partner/myheritage">Free LDS Access</a></span></div></li>
+				<li><a class="ancestry" href="" target="_blank"><img src="./logos/ancestry.jpg"></a><div class="company">Ancestry<span class="free">, <a href="https://familysearch.org/partner/ancestry">Free LDS Access</a></span></div></li>
+				<li><a class="findmypast" href="" target="_blank"><img src="./logos/findmypast.jpg"></a><div class="company">Findmypast<span class="free">, <a href="https://familysearch.org/partner/findmypast">Free LDS Access</a></span></div></li>
+				<li><a class="geneanet" href="" target="_blank"><img src="./logos/geneanet.jpg"></a><div class="company">Geneanet<span class="free">, <a href="https://familysearch.org/partner/geneanet">Free LDS Access</a></span></div></li>
+				<li><a class="americanancestors" href="" target="_blank"><img src="./logos/americanancestors.png"></a><div class="company">American Ancestors<span class="free">, <a href="https://familysearch.org/partner/americanancestors">Free LDS Access</a></span></div></li>
 				<li><a class="genealogybank" href="" target="_blank"><img src="./logos/genealogybank.png"></a><div class="company">Genealogy Bank</div></li>
 				<li><a class="google" href="" target="_blank"><img src="./logos/google.jpg"></a><div class="company">Google</div></li>
 				<li><a class="wikipedia" href="" target="_blank"><img src="./logos/wikipedia.png"></a><div class="company">Wikipedia</div></li>
@@ -36,6 +38,15 @@
 				<li><a class="worldvitalrecords" href="" target="_blank"><img src="./logos/worldvitalrecords.png"></a><div class="company">World Vital Records</div></li>
 				<li><a class="familytreenow" href="" target="_blank"><img src="./logos/familytreenow.png"></a><div class="company">FamilyTreeNow</div></li>
 			</ul>
+			<div class="french">
+				<hr>
+				<h3>French Collections</h3>
+				<p>The following record collections are specific to french research.</p>
+				<ul>
+					<li><a class="geneanet" href="" target="_blank"><img src="./logos/geneanet.jpg"></a><div class="company">Geneanet<span class="free">, <a href="https://familysearch.org/partner/geneanet">Free LDS Access</a></span></div></li>
+					<li><a class="bigenet" href="" target="_blank"><img src="./logos/bigenet.png"></a><div class="company">Bigenet</div></li>
+				</ul>
+			</div>
 		</div>
 
 		<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -54,46 +65,47 @@
 			const firstNameOnly = person.display.name.split(' ')[0];
 			const firstName = person.names[0].nameForms[0].parts[0].value;
 			const surname = person.names[0].nameForms[0].parts[1].value;
-			const birthYear = person.display.birthDate.substring(person.display.birthDate.length-4,person.display.birthDate.length);
-			const deathYear = person.display.deathDate.substring(person.display.deathDate.length-4,person.display.deathDate.length);
+			const birthPlace = (person.display.birthPlace) ? person.display.birthPlace : "";
+			const birthYear = (person.display.birthDate) ? person.display.birthDate.substring(person.display.birthDate.length-4,person.display.birthDate.length) : "";
+			const deathYear = (person.display.deathDate) ? person.display.deathDate.substring(person.display.deathDate.length-4,person.display.deathDate.length) : "";
 			console.log(person);
 			$('.person').text(person.display.name);
 
 			// Generate links
-			$('.familysearch').attr("href", 'https://familysearch.org/search/record/results?count=20&query=%2Bgivenname%3A%22'+firstName+'%22~%2Bsurname%3A%22'+surname+'%22~%2Bbirth_place%3A%22%27'+person.display.birthPlace+'%27%22~%2Bbirth_year%3A'+birthYear+'~');
-
-			$('.ancestry').attr("href", 'http://search.ancestry.com/cgi-bin/sse.dll?gl=allgs&gss=sfs28_ms_f-2_s&new=1&rank=1&msT=1&gsfn='+firstName+'&gsln='+surname+'&msbpn__ftp='+person.display.birthPlace+'&msbdy='+birthYear+'&msdpn__ftp='+person.display.deathPlace+'&msddy='+deathYear+'&pid='+params.pid);
-			
-			$('.findmypast').attr("href", 'http://search.findmypast.com/search/world-records?firstname_variants=true&firstname='+firstName+'&lastname='+surname+'&keywordsplace='+person.display.birthPlace+'&yearofbirth='+birthYear+'&yearofbirth_offset=2&pid='+params.pid);
-			
-			$('.myheritage').attr("href", 'https://www.myheritage.com/research?action=query&formId=master&formMode=1&qname=Name+fn.'+firstName+'+fnmo.2+fnmsvos.1+fnmsmi.1+ln.'+surname+'+lnmo.4+lnmsdm.1+lnmsmf3.1+lnmsrs.1&qevents-birth0=Event+et.birth+ey.'+birthYear+'+ep.'+person.display.birthPlace+'+epmo.similar&qevents-death1=Event+et.death+ey.'+deathYear+'+epmo.similar&qevents=List&utm_source=partner_familysearch&utm_medium=partner&utm_campaign=research&fspid='+params.pid);
-
+			$('.familysearch').attr("href", 'https://familysearch.org/search/record/results?count=20&query=%2Bgivenname%3A%22'+firstName+'%22~%2Bsurname%3A%22'+surname+'%22~%2Bbirth_place%3A%22%27'+birthPlace+'%27%22~%2Bbirth_year%3A'+birthYear+'~');
+			$('.ancestry').attr("href", 'http://search.ancestry.com/cgi-bin/sse.dll?gl=allgs&gss=sfs28_ms_f-2_s&new=1&rank=1&msT=1&gsfn='+firstName+'&gsln='+surname+'&msbpn__ftp='+birthPlace+'&msbdy='+birthYear+'&msdpn__ftp='+person.display.deathPlace+'&msddy='+deathYear+'&pid='+params.pid);
+			$('.findmypast').attr("href", 'http://search.findmypast.com/search/world-records?firstname_variants=true&firstname='+firstName+'&lastname='+surname+'&keywordsplace='+birthPlace+'&yearofbirth='+birthYear+'&yearofbirth_offset=2&pid='+params.pid);
+			$('.myheritage').attr("href", 'https://www.myheritage.com/research?action=query&formId=master&formMode=1&qname=Name+fn.'+firstName+'+fnmo.2+fnmsvos.1+fnmsmi.1+ln.'+surname+'+lnmo.4+lnmsdm.1+lnmsmf3.1+lnmsrs.1&qevents-birth0=Event+et.birth+ey.'+birthYear+'+ep.'+birthPlace+'+epmo.similar&qevents-death1=Event+et.death+ey.'+deathYear+'+epmo.similar&qevents=List&utm_source=partner_familysearch&utm_medium=partner&utm_campaign=research&fspid='+params.pid);
 			$('.genealogybank').attr("href", 'https://www.genealogybank.com/explore/all?lname='+surname+'&fname='+firstName+'&kwinc=&kwexc=&dateType=range&rgfromDate='+birthYear+'&rgtoDate='+deathYear+'&formDate=&formDateFlex=10&sort=bst');
-
-			$('.geneanet').attr("href", 'http://en.geneanet.org/fonds/individus/?size=10&sourcename=&ignore_each_patronyme=&ignore_each_prenom=&type_periode=between&exact_month=&exact_day=&exact_year=&nom='+surname+'&ignore_each_patronyme=&prenom='+firstName+'&prenom_operateur=or&ignore_each_prenom=&place__0__='+person.display.birthPlace+'&zonegeo__0__=&country__0__=&region__0__=&subregion__0__=&place__1__=&zonegeo__1__=&country__1__=&region__1__=&subregion__1__=&place__2__=&zonegeo__2__=&country__2__=&region__2__=&subregion__2__=&place__3__=&zonegeo__3__=&country__3__=&region__3__=&subregion__3__=&place__4__=&zonegeo__4__=&country__4__=&region__4__=&subregion__4__=&type_periode=between&from='+birthYear+'&to='+deathYear+'&exact_month=&exact_day=&exact_year=&go=1');
-
-			$('.google').attr("href", 'https://www.google.com/search?q='+person.display.name+'%2C+'+person.display.birthPlace+'%2C+'+birthYear);
-
+			$('.geneanet').attr("href", 'http://en.geneanet.org/fonds/individus/?size=10&sourcename=&ignore_each_patronyme=&ignore_each_prenom=&type_periode=between&exact_month=&exact_day=&exact_year=&nom='+surname+'&ignore_each_patronyme=&prenom='+firstName+'&prenom_operateur=or&ignore_each_prenom=&place__0__='+birthPlace+'&zonegeo__0__=&country__0__=&region__0__=&subregion__0__=&place__1__=&zonegeo__1__=&country__1__=&region__1__=&subregion__1__=&place__2__=&zonegeo__2__=&country__2__=&region__2__=&subregion__2__=&place__3__=&zonegeo__3__=&country__3__=&region__3__=&subregion__3__=&place__4__=&zonegeo__4__=&country__4__=&region__4__=&subregion__4__=&type_periode=between&from='+birthYear+'&to='+deathYear+'&exact_month=&exact_day=&exact_year=&go=1');
+			$('.americanancestors').attr("href", 'https://www.americanancestors.org/search/database-search?firstname='+firstName+'&lastname='+surname+'&fromyear='+birthYear+'&toyear='+deathYear+'&location='+birthPlace+'&free=false');
+			$('.google').attr("href", 'https://www.google.com/search?q='+person.display.name+'%2C+'+birthPlace+'%2C+'+birthYear);
 			$('.wikipedia').attr("href", 'https://en.wikipedia.org/w/index.php?search='+person.display.name);
-
 			$('.afrigeneas').attr("href", 'http://www.afrigeneas.com/cgi-bin/search/search.cgi?searchcrit='+surname);
-
 			$('.archives').attr("href", 'https://www.archives.com/search/ancestor/results?FirstName='+firstName+'&LastName='+surname+'&BirthYear='+birthYear+'&DeathYear='+deathYear+'&Country=United%20States');
-
 			$('.billiongraves').attr("href", 'https://billiongraves.com/search/results?given_names=almon%20giles&family_names=clegg&birth_year=1903&death_year=1989&year_range=5&action=search&exact=true');
-
 			$('.findagrave').attr("href", 'https://findagrave.com/cgi-bin/fg.cgi?page=gsr&GSfn='+firstNameOnly+'&GSmn=&GSln='+surname+'&GSbyrel=in&GSby='+birthYear+'&GSdyrel=in&GSdy='+deathYear+'&GScntry=0&GSst=0&GSgrid=&df=all&GSob=n');
-
 			$('.loc').attr("href", 'http://chroniclingamerica.loc.gov/search/pages/results/?state=&date1='+birthYear+'&date2='+deathYear+'&proxtext='+firstNameOnly+'+'+surname+'&x=0&y=0&dateFilterType=yearRange&rows=20&searchType=basic');
-
 			$('.fold3').attr("href", 'https://www.fold3.com/search/#s_given_name='+firstName+'&s_surname='+surname+'&ocr=1&dr_year=m,'+birthYear+'-'+deathYear);
-
 			$('.blm').attr("href", 'https://glorecords.blm.gov/results/default.aspx?searchCriteria=type=patent|st=|cty=|ln='+surname+'|fn='+firstNameOnly+'|sp=true|sw=true|sadv=false');
-
 			$('.newspaperarchive').attr("href", 'https://newspaperarchive.com/tags/'+firstNameOnly+'-'+surname+'?ndt=by&py='+birthYear+'&pey='+deathYear+'/');
+			$('.worldvitalrecords').attr("href", 'http://www.worldvitalrecords.com/GlobalSearch.aspx?qt=g&zfn='+firstName+'&zln='+surname+'&zplace='+birthPlace+'&zdate='+birthYear+'&zdater=2');
+			$('.familytreenow').attr("href", 'https://www.familytreenow.com/search/genealogy/results?first='+firstNameOnly+'&last='+surname+'&citystatezip='+birthPlace+'&dobyyyy=1903');
 
-			$('.worldvitalrecords').attr("href", 'http://www.worldvitalrecords.com/GlobalSearch.aspx?qt=g&zfn='+firstName+'&zln='+surname+'&zplace='+person.display.birthPlace+'&zdate='+birthYear+'&zdater=2');
-			$('.familytreenow').attr("href", 'https://www.familytreenow.com/search/genealogy/results?first=Almon&last=Clegg&citystatezip=Heber%20City,%20UT&dobyyyy=1903');
+			$('.bigenet').attr("href", 'https://www.bigenet.org/');
+
+			// Show French records if person is born in france || browser language is french
+			if (birthPlace.split('France').length > 1 || navigator.language == "fr-FR" || navigator.language == "fr") {
+				$('.french').show();
+			}
+		});
+
+		// Enable partner access if LDS member
+		fs.get('/platform/users/current/partner-eligible', function(error, response) {
+			if (response.statusCode == 204) {
+				$('.free').show();
+				console.log("Free LDS Access");
+			}
 		});
 
 		// Get Query parameters
