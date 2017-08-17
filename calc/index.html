@@ -32,10 +32,12 @@
 
 		<script type="text/javascript">
 		var params = getQueryParams();
-		var fs = new FamilySearch({ accessToken: params.token, environment: 'production' });
+		var fs = new FamilySearch({ accessToken: params.token, environment: 'production', requestInterval: 500 });
 		var ancestors = 0, continuationLines = 0, ancestorgens = 0, descendants = 0, descendantgens = 0, descendantSpouses = 0, male= 0, female = 0;
 
 		// TODO:
+		// Save results in localstorage for faster reload time.
+		// Use http://eventbrite.github.io/britecharts/ for cool charts and graphs
 		// Number of people who have multiple marriages (by divorce or polygammy)
 		// Avg number of kids per couple
 

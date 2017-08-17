@@ -23,6 +23,8 @@
 				<p>The following record collections are specific to french research.</p>
 				<ul>
 					<li><a class="geneanet" href="" target="_blank"><img src="./logos/geneanet.jpg"></a><div class="company">Geneanet<span class="free">, <a href="https://familysearch.org/partner/geneanet">Free LDS Access</a></span></div></li>
+					<li><a class="filae" href="" target="_blank"><img src="./logos/filae.png"></a><div class="company">Filae</div></li>
+					<li><a class="ain" href="" target="_blank"><img src="./logos/ain.png"></a><div class="company">Archives De L'ain</div></li>
 					<li><a class="bigenet" href="" target="_blank"><img src="./logos/bigenet.png"></a><div class="company">Bigenet</div></li>
 				</ul>
 				<hr>
@@ -93,6 +95,8 @@
 			$('.worldvitalrecords').attr("href", 'http://www.worldvitalrecords.com/GlobalSearch.aspx?qt=g&zfn='+firstName+'&zln='+surname+'&zplace='+birthPlace+'&zdate='+birthYear+'&zdater=2');
 			$('.familytreenow').attr("href", 'https://www.familytreenow.com/search/genealogy/results?first='+firstNameOnly+'&last='+surname+'&citystatezip='+birthPlace+'&dobyyyy=1903');
 
+			$('.filae').attr("href", 'https://www.filae.com/v4/genealogie/SearchApi.mvc/SearchForm?Lastname='+surname+'&Firstname='+firstNameOnly);
+			$('.ain').attr("href", 'http://www.archives.ain.fr/archive/recherche/etatcivil/n:88?JR=&MR=&AR=&JCR=&AJCR=&JG=&MG=&AG=&JResult=&MResult=&AResult=&REch_commune_Index=&REch_commune_Libel=&REch_commune=&RECH_acte=&RECH_unitdate_debut=&RECH_unitdate_fin=&RECH_unitdate_exacte=&rech_indexation-nom=john&rech_indexation-prenom=clegg&Archives.RECH_Valid=&type=etatcivil');
 			$('.bigenet').attr("href", 'https://www.bigenet.org/');
 
 			// Show French records if person is born in france || browser language is french
