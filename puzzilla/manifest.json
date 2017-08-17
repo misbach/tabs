@@ -1,0 +1,11 @@
+{
+  "id": "puzzilla",
+  "icon": "http://www.valleyhelpathome.com/wp-content/uploads/2014/02/Puzzilla.png",
+  "title": "Puzzilla",
+  "description": "Puzzilla: Descendancy browser",
+  "company": "Puzzilla",
+  "phone": "800-555-1212",
+  "email": "info@puzzilla.org",
+  "url": "https://puzzilla.org/descendants?id={pid}",
+  "support_url": "https://puzzilla.org/sendmail"
+}

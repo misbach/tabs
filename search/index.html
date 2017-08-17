@@ -17,6 +17,17 @@
 		<div class="container">
 			<h1>Historical Record Search</h1>
 			<p>The following links will take you to the website with the search fields pre-filled out with the information for <span class="person"></span></p>
+
+			<div class="french">
+				<h3>French Collections</h3>
+				<p>The following record collections are specific to french research.</p>
+				<ul>
+					<li><a class="geneanet" href="" target="_blank"><img src="./logos/geneanet.jpg"></a><div class="company">Geneanet<span class="free">, <a href="https://familysearch.org/partner/geneanet">Free LDS Access</a></span></div></li>
+					<li><a class="bigenet" href="" target="_blank"><img src="./logos/bigenet.png"></a><div class="company">Bigenet</div></li>
+				</ul>
+				<hr>
+			</div>
+
 			<ul>
 				<li><a class="familysearch" href="" target="_blank"><img src="./logos/familysearch.png"></a><div class="company">FamilySearch</div></li>
 				<li><a class="myheritage" href="" target="_blank"><img src="./logos/myheritage.jpg"></a><div class="company">MyHeritage<span class="free">, <a href="https://familysearch.org/partner/myheritage">Free LDS Access</a></span></div></li>
@@ -38,15 +49,6 @@
 				<li><a class="worldvitalrecords" href="" target="_blank"><img src="./logos/worldvitalrecords.png"></a><div class="company">World Vital Records</div></li>
 				<li><a class="familytreenow" href="" target="_blank"><img src="./logos/familytreenow.png"></a><div class="company">FamilyTreeNow</div></li>
 			</ul>
-			<div class="french">
-				<hr>
-				<h3>French Collections</h3>
-				<p>The following record collections are specific to french research.</p>
-				<ul>
-					<li><a class="geneanet" href="" target="_blank"><img src="./logos/geneanet.jpg"></a><div class="company">Geneanet<span class="free">, <a href="https://familysearch.org/partner/geneanet">Free LDS Access</a></span></div></li>
-					<li><a class="bigenet" href="" target="_blank"><img src="./logos/bigenet.png"></a><div class="company">Bigenet</div></li>
-				</ul>
-			</div>
 		</div>
 
 		<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -68,7 +70,6 @@
 			const birthPlace = (person.display.birthPlace) ? person.display.birthPlace : "";
 			const birthYear = (person.display.birthDate) ? person.display.birthDate.substring(person.display.birthDate.length-4,person.display.birthDate.length) : "";
 			const deathYear = (person.display.deathDate) ? person.display.deathDate.substring(person.display.deathDate.length-4,person.display.deathDate.length) : "";
-			console.log(person);
 			$('.person').text(person.display.name);
 
 			// Generate links
@@ -104,7 +105,6 @@
 		fs.get('/platform/users/current/partner-eligible', function(error, response) {
 			if (response.statusCode == 204) {
 				$('.free').show();
-				console.log("Free LDS Access");
 			}
 		});
 

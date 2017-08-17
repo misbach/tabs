@@ -1,0 +1,11 @@
+{
+    "id": "echo",
+    "icon": "https://image.freepik.com/free-icon/wrench_318-114535.jpg",
+    "title": "Echo",
+    "description": "Echo: Test tab to verify the custom tab framework is working",
+    "url": "https://httpbin.org/get?pid={pid}&token={token}",
+    "company": "ACME",
+    "phone": "888-123-4567",
+    "email": "dev@acme.com",
+    "support_url": "https://familysearch.org/developers"
+}
