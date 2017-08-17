@@ -5,10 +5,12 @@
     <title>DNA</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <style type="text/css">
-      .avatar { border-radius: 50%; border: solid; border-width: 3px; border-color: #9e9b9b; }
-      li { display: flex; margin-bottom: 20px; }
-      .name { font-size: 30px; padding-left: 10px; padding-top: 5px; }
-      .email { padding-left: 10px; padding-top: 21px; color: #cccccc; }
+      .avatar { border-radius: 50%; border: solid; border-width: 3px; border-color: #9e9b9b; float: left; }
+      ul { display: flex; flex-wrap: wrap; }
+      li { display: inline; margin-bottom: 20px; width: 350px; margin-right: 50px; }
+      .name { font-size: 18px; padding-left: 10px; width: 250px; float: left; }
+      .relation { padding-left: 10px; color: #cccccc; float: left; }
+      .email { float: right; }
     </style>
   </head>
   <body>
@@ -86,24 +88,46 @@
           unique.delete("MMMM-MM8");
           unique.delete("MMMM-MMD"); // LDS Church
           unique.delete(fs.user.treeUserId);
-          // console.log(unique, fs.user);
 
           // Get contributor info
+          var j = 0;
           for (var i = unique.values(); val=i.next().value; ) {
+            console.log(unique[i]);
             fs.get('/platform/users/agents/'+val, function(error, response) {
               let id = response.data.agents[0].id;
               let name = response.data.agents[0].accounts[0].accountName;
-              let email = (response.data.agents[0].emails) ? response.data.agents[0].emails[0].resource.substring(7,200) : "private";
+              let email = (response.data.agents[0].emails) ? '<a href="'+response.data.agents[0].emails[0].resource+'" class="email"><img src="email.png"></a>' : "";
 
 							// Weird case where logged in user have multiple contributor IDs so need to check if CIS IDs match
               if (id == fs.user.id) return;
-
-              $('.cousin-list').append('<li><img class="avatar" src="https://dummyimage.com/48x48/D8D8D6/fff&text='+name.substring(0,2)+'"><div class="name">'+name+'</div><div class="email">'+email+'</div></li>');
+              $('.cousin-list').append('<li><img class="avatar" src="https://dummyimage.com/48x48/D8D8D6/fff&text='+name.substring(0,2)+'"><div class="name">'+name+'</div><div class="relation">'+relationships[j]+'</div>'+email+'</li>');
+              j++;
             });
           }
         });
       }
     });
+
+    var relationships = [
+      "1st Cousin 0.25%",
+      "1st Cousin once removed 0.18%",
+      "1st Cousin twice removed 0.12%",
+      "2nd Cousin 0.25%",
+      "2nd Cousin once removed 0.18%",
+      "2nd Cousin twice removed 0.12%",
+      "3rd Cousin 0.25%",
+      "3rd Cousin once removed 0.18%",
+      "3rd Cousin twice removed 0.12%",
+      "4th Cousin 0.25%",
+      "4th Cousin once removed 0.18%",
+      "4th Cousin twice removed 0.12%",
+      "5th Cousin 0.25%",
+      "5th Cousin once removed 0.18%",
+      "5th Cousin twice removed 0.12%",
+      "6th Cousin 0.25%",
+      "6th Cousin once removed 0.18%",
+      "6th Cousin twice removed 0.12%"
+    ];
 
     // Get Query parameters
     function getQueryParams() {
