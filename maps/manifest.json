@@ -1,0 +1,11 @@
+{
+  "id": "googlemap",
+  "icon": "https://raw.githubusercontent.com/misbach/tabs/master/maps/icon.png",
+  "title": "Google Map",
+  "description": "Plot ancestor locations on a google map",
+  "company": "Google Inc.",
+  "phone": "800-555-1212",
+  "email": "maps@google.com",
+  "url": "https://misbach.github.io/tabs/maps/index.html?pid={pid}&token={token}",
+  "support_url": "https://maps.google.com"
+}
