@@ -100,8 +100,19 @@
 
 							// Weird case where logged in user have multiple contributor IDs so need to check if CIS IDs match
               if (id == fs.user.id) return;
-              $('.cousin-list').append('<li><img class="avatar" src="https://dummyimage.com/48x48/D8D8D6/fff&text='+name.substring(0,2)+'"><div class="name">'+name+'</div><div class="relation">'+relationships[j]+'</div>'+email+'</li>');
-              j++;
+
+              // Get random avatar
+              $.ajax({
+                url: 'https://randomuser.me/api/',
+                dataType: 'json',
+                success: function(data) {
+                  const avatar = data.results[0].picture.thumbnail;
+                  console.log(avatar);
+                  $('.cousin-list').append('<li><img class="avatar" src="'+avatar+'"><div class="name">'+name+'</div><div class="relation">'+relationships[j]+'</div>'+email+'</li>');
+                  j++;
+                }
+              });
+
             });
           }
         });
