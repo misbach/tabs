@@ -17,20 +17,21 @@
     <script type="text/javascript">
       // TODO: Save geocoded locations to loca storage
       //       One hop relatives
-      //       Cache geocoded locations in locastorage
+      //       Cache geocoded locations in localstorage
       //       Zoom and center map dynamically to all pins
       //       https://carlo.zottmann.org/posts/2013/04/14/google-image-resizer.html
 
       var params = getQueryParams();
       var fs = new FamilySearch({ accessToken: params.token, environment: 'production' });
       var map;
-      var myOptions = { zoom: 4, center: new google.maps.LatLng(39.4865721,-94.266348), mapTypeId: 'terrain' };
+      var myOptions = { zoom: 4, center: new google.maps.LatLng(39.4865721,-94.266348), mapTypeId: 'roadmap' };
       map = new google.maps.Map($('#map_canvas')[0], myOptions);
 
       // Get protrait
       fs.get('/platform/tree/persons/'+params.pid+"/portraits", function(error, response) {
-        console.log(response.data.sourceDescriptions);
-        var avatar = 'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?url='+response.data.sourceDescriptions[0].links['image-icon'].href+'&container=focus&resize_w=48&resize_h=48&refresh=2592000';
+        if (response.data) {
+          var avatar = 'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?url='+response.data.sourceDescriptions[0].links['image-icon'].href+'&container=focus&resize_w=48&resize_h=48&refresh=2592000';
+        } else var avatar = "http://maps.google.com/mapfiles/ms/micons/man.png";
 
         // Get locations from FamilySearch
         fs.get('/platform/tree/persons/'+params.pid, function(error, response) {
@@ -39,15 +40,20 @@
           $('.ancestor').text(person.display.name)
           var locations = [];
           // Birth/Death Locations
-          locations.push({ location: person.display.birthPlace, title: person.display.name, info: person.display.name, icon: avatar });
-          locations.push({ location: person.display.deathPlace, title: person.display.name, info: person.display.name, icon: avatar });
+          locations.push({ location: person.display.birthPlace, title: person.display.name, info: person.display.name+": Birth", icon: avatar });
+          locations.push({ location: person.display.deathPlace, title: person.display.name, info: person.display.name+": Death", icon: avatar });
 
           // Get fact locations
           for (var i=0; i<person.facts.length; i++) {
             if (person.facts[i].place) {
               if (person.facts[i].place.normalized) {
-                console.log(person.facts[i].place.normalized[0].value)
-                locations.push({ location: person.facts[i].place.normalized[0].value, title: person.display.name, info: person.display.name, icon: "http://maps.google.com/mapfiles/ms/micons/flag.png" });
+                console.log(person.facts[i])
+                locations.push({
+                  location: person.facts[i].place.normalized[0].value,
+                  title: person.display.name,
+                  info: person.display.name+": "+person.facts[i].type,
+                  icon: "http://maps.google.com/mapfiles/ms/micons/flag.png"
+                });
               }
             }
           }
