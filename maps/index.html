@@ -7,47 +7,78 @@
     </style>
   </head>
   <body>
+  <h2>Ancestor Map</h2>
+  <p>Map of all events for <span class="ancestor"></span> and one-hop relatives.</p>
 
-    <center><div id="map_canvas" style="width: 700px; height: 500px; "></div></center>
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyAoYQ1svguexT-riNQ9RnK_I4T4_KhrNJA"></script> 
-    <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoYQ1svguexT-riNQ9RnK_I4T4_KhrNJA&callback=initMap" type="text/javascript"></script> -->
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <center><div id="map_canvas" style="width: 750px; height: 500px; "></div></center>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoYQ1svguexT-riNQ9RnK_I4T4_KhrNJA" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="https://unpkg.com/fs-js-lite@2.x/dist/FamilySearch.min.js"></script>
     <script type="text/javascript">
+      // TODO: Save geocoded locations to loca storage
+      //       One hop relatives
+      //       Zoom and center map dynamically to all pins
+
+      //       https://carlo.zottmann.org/posts/2013/04/14/google-image-resizer.html
+
       var params = getQueryParams();
       var fs = new FamilySearch({ accessToken: params.token, environment: 'production' });
       var map;
-      var myOptions = { zoom: 1, center: new google.maps.LatLng(0, 0), mapTypeId: 'terrain' };
+      var myOptions = { zoom: 4, center: new google.maps.LatLng(39.4865721,-94.266348), mapTypeId: 'terrain' };
       map = new google.maps.Map($('#map_canvas')[0], myOptions);
 
-      // Get locations from FamilySearch
-      fs.get('/platform/tree/persons/'+params.pid, function(error, response) {
-        var person = response.data.persons[0];
-        console.log(person);
-        var addresses = [];
-        addresses.push(person.display.birthPlace);
-        addresses.push(person.display.deathPlace);
+      // Get protrait
+      fs.get('/platform/tree/persons/'+params.pid+"/portraits", function(error, response) {
+        console.log(response.data.sourceDescriptions);
+        var avatar = 'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?url='+response.data.sourceDescriptions[0].links['image-icon'].href+'&container=focus&resize_w=48&resize_h=48&refresh=2592000';
 
-        for (var i=0; i<person.facts.length; i++) {
-          if (person.facts[i].place) {
-            if (person.facts[i].place.normalized) {
-              console.log(person.facts[i].place.normalized[0].value)
-              addresses.push(person.facts[i].place.normalized[0].value);
+        // Get locations from FamilySearch
+        fs.get('/platform/tree/persons/'+params.pid, function(error, response) {
+          var person = response.data.persons[0];
+          console.log(person);
+          $('.ancestor').text(person.display.name)
+          var locations = [];
+          // Birth/Death Locations
+          locations.push({ location: person.display.birthPlace, title: person.display.name, info: person.display.name, icon: avatar });
+          locations.push({ location: person.display.deathPlace, title: person.display.name, info: person.display.name, icon: avatar });
+
+          // Get fact locations
+          for (var i=0; i<person.facts.length; i++) {
+            if (person.facts[i].place) {
+              if (person.facts[i].place.normalized) {
+                console.log(person.facts[i].place.normalized[0].value)
+                locations.push({ location: person.facts[i].place.normalized[0].value, title: person.display.name, info: person.display.name, icon: "http://maps.google.com/mapfiles/ms/micons/flag.png" });
+              }
             }
           }
-        }
 
-        // Geocode locations
-        for (var x = 0; x < addresses.length; x++) {
-          $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false', null, function (data) {
-              var p = data.results[0].geometry.location
-              var latlng = new google.maps.LatLng(p.lat, p.lng);
-              new google.maps.Marker({
-                position: latlng,
-                map: map
-              });
-          });
-        }
+          // Geocode locations
+          for (var x = 0; x < locations.length; x++) {
+            $.ajax({
+              url: 'https://maps.googleapis.com/maps/api/geocode/json?address='+locations[x].location,
+              type: "get",
+              dataType: "json",
+              iterator: x,
+              locations: locations,
+              success: function(data, textStatus, jqXHR) {
+                var p = data.results[0].geometry.location
+                var latlng = new google.maps.LatLng(p.lat, p.lng);
+                var marker = new google.maps.Marker({
+                  position: latlng,
+                  map: map,
+                  icon: this.locations[this.iterator].icon,
+                  title: this.locations[this.iterator].title
+                });
+                var infowindow = new google.maps.InfoWindow({
+                  content: this.locations[this.iterator].info
+                });
+                marker.addListener('click', function() {
+                  infowindow.open(map, marker);
+                });
+              }
+            });
+          }
+        })
       })
 
       // Get Query parameters
