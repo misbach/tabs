@@ -1,8 +1,8 @@
 {
   "id": "googlemap",
   "icon": "https://raw.githubusercontent.com/misbach/tabs/master/maps/icon.png",
-  "title": "Google Map",
-  "description": "Plot ancestor locations on a google map",
+  "title": "Map",
+  "description": "Google Map: Plot ancestor locations on a google map",
   "company": "Google Inc.",
   "phone": "800-555-1212",
   "email": "maps@google.com",
