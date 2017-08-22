@@ -30,8 +30,10 @@
 
         for (var i=0; i<person.facts.length; i++) {
           if (person.facts[i].place) {
-            console.log(person.facts[i].place.normalized[0].value)
-            addresses.push(person.facts[i].place.normalized[0].value);
+            if (person.facts[i].place.normalized) {
+              console.log(person.facts[i].place.normalized[0].value)
+              addresses.push(person.facts[i].place.normalized[0].value);
+            }
           }
         }
 
