@@ -18,11 +18,10 @@
     	</center>
       <p>What is your Bacon number? Or, how many degrees are you from <a href="http://www.baconbros.com/" target="_blank">Kevin Bacon</a>. This is based on the game of Six Degrees of Separation, the idea that all living things and everything else in the world are six or fewer steps away from each other so that a chain of "a friend of a friend" statements can be made to connect any two people in a maximum of six steps. It was originally set out by <a href="https://en.wikipedia.org/wiki/Frigyes_Karinthy" target="_blank">Frigyes Karinthy</a> in 1929.</p>
 
+      <h3>Bacon Number: <span class="number"></span></h3>
+      <p><strong><span class="currentPerson"></span></strong> is <span class="number"></span> degrees away from a common ancestor with Kevin Bacon.</p>
 
-      <h3>Your Bacon Number: <span class="number"></span></h3>
-      <p><span class="currentPerson"></span> is <span class="number"></span> degrees away from a common ancestor with Kevin Bacon.</p>
-
-      <h3>Your relationship</h3>
+      <h3>See relationship</h3>
 
 	    <div id="accordion" role="tablist">
 			  <div class="card">
@@ -64,9 +63,7 @@
 
     // Get User
     fs.get('/platform/tree/persons/'+params.pid, function(error, response) {
-    	let currentPerson = response.data.persons[0].display.name;
-    	console.log(currentPerson);
-    	$('.currentPerson').text(currentPerson);
+    	$('.currentPerson').text(response.data.persons[0].display.name);
 
       let bacons = {
     		"L2N8-NL6": {"name": "Edmund Norwood Bacon", "descendants": 0, "ancestors": 0, "age": 95 },
@@ -80,11 +77,13 @@
 				// fs.get("/tree-data/my-relatives/tree-graph-relation/LTRT-ZXM/"+key+"?showApexCoParentEx=true", 
 	        { headers: { Authorization: 'Bearer '+fs.accessToken }, },
 	        function(err, rsp) {
+	        	console.log(rsp.data.data.persons);
 						// Iterate over relationship path
   	        for (var i=0; i<rsp.data.data.persons.length; i++) {
   	        	// Determin shortest path
   	        	let relation = rsp.data.data.persons[i].relationshipToPrevious;
-							if (relation == "WOMAN" || relation == "MAN" || relation == "SON" || relation == "DAUGHTER") {
+							// if (relation == "WOMAN" || relation == "MAN" || relation == "SON" || relation == "DAUGHTER") {
+							if (relation == "SON" || relation == "DAUGHTER") {
 								if (length > i) length = i;
 							}
 
