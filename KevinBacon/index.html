@@ -20,7 +20,7 @@
 
 
       <h3>Your Bacon Number: <span class="number"></span></h3>
-      <p>You are <span class="number"></span> degrees away from a common ancestor with Kevin Bacon.</p>
+      <p><span class="currentPerson"></span> is <span class="number"></span> degrees away from a common ancestor with Kevin Bacon.</p>
 
       <h3>Your relationship</h3>
 
@@ -63,8 +63,10 @@
     var fs = new FamilySearch({ accessToken: params.token, environment: 'production' });
 
     // Get User
-    fs.get('/platform/users/current', function(error, response) {
-      fs.user = response.data.users[0];
+    fs.get('/platform/tree/persons/'+params.pid, function(error, response) {
+    	let currentPerson = response.data.persons[0].display.name;
+    	console.log(currentPerson);
+    	$('.currentPerson').text(currentPerson);
 
       let bacons = {
     		"L2N8-NL6": {"name": "Edmund Norwood Bacon", "descendants": 0, "ancestors": 0, "age": 95 },
@@ -74,12 +76,10 @@
     	let length = 99;
 
 			Object.keys(bacons).forEach(function(key,index) {
-	      fs.get("/tree-data/my-relatives/tree-graph-relation/"+fs.user.personId+"/"+key+"?showApexCoParentEx=true", 
+	      fs.get("/tree-data/my-relatives/tree-graph-relation/"+params.pid+"/"+key+"?showApexCoParentEx=true", 
 				// fs.get("/tree-data/my-relatives/tree-graph-relation/LTRT-ZXM/"+key+"?showApexCoParentEx=true", 
 	        { headers: { Authorization: 'Bearer '+fs.accessToken }, },
 	        function(err, rsp) {
-	        	// console.log(rsp.data.data.persons);
-
 						// Iterate over relationship path
   	        for (var i=0; i<rsp.data.data.persons.length; i++) {
   	        	// Determin shortest path
