@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>DNA</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <style type="text/css">
+    	#accordion { width: 450px; }
+    	h3 { margin-top: 40px; }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+    	<center>
+	    	<img src="banner.jpg">
+	      <h1>Six Degrees from Kevin Bacon</h1>
+    	</center>
+      <p>What is your Bacon number? Or, how many degrees are you from <a href="http://www.baconbros.com/" target="_blank">Kevin Bacon</a>. This is based on the game of Six Degrees of Separation, the idea that all living things and everything else in the world are six or fewer steps away from each other so that a chain of "a friend of a friend" statements can be made to connect any two people in a maximum of six steps. It was originally set out by <a href="https://en.wikipedia.org/wiki/Frigyes_Karinthy" target="_blank">Frigyes Karinthy</a> in 1929.</p>
+
+
+      <h3>Your Bacon Number: <span class="number"></span></h3>
+      <p>You are <span class="number"></span> degrees away from a common ancestor with Kevin Bacon.</p>
+
+      <h3>Your relationship</h3>
+
+	    <div id="accordion" role="tablist">
+			  <div class="card">
+			    <div class="card-header" role="tab" id="headingOne">
+		        <a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+		          Edmund Norwood Bacon (Kevin's Father)
+		        </a>
+			    </div>
+			    <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+			      <div class="card-body">
+			        <ul class="L2N8-NL6"></ul>
+			      </div>
+			    </div>
+			  </div>
+
+			  <div class="card">
+			    <div class="card-header" role="tab" id="headingTwo">
+		        <a data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+		          Ruth Hilda Holmes (Kevin's Mother)
+		        </a>
+			    </div>
+			    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
+			      <div class="card-body">
+			        <ul class="L2N8-NR7"></ul>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/fs-js-lite@2.x/dist/FamilySearch.min.js"></script>
+
+    <script type="text/javascript">
+    var params = getQueryParams();
+    var fs = new FamilySearch({ accessToken: params.token, environment: 'production' });
+
+    // Get User
+    fs.get('/platform/users/current', function(error, response) {
+      fs.user = response.data.users[0];
+
+      let bacons = {
+    		"L2N8-NL6": {"name": "Edmund Norwood Bacon", "descendants": 0, "ancestors": 0, "age": 95 },
+    		"L2N8-NR7": {"name": "Ruth Hilda Holmes", "descendants": 0, "ancestors": 0, "age": 75 }
+    	}
+
+    	let length = 99;
+
+			Object.keys(bacons).forEach(function(key,index) {
+	      fs.get("/tree-data/my-relatives/tree-graph-relation/"+fs.user.personId+"/"+key+"?showApexCoParentEx=true", 
+				// fs.get("/tree-data/my-relatives/tree-graph-relation/LTRT-ZXM/"+key+"?showApexCoParentEx=true", 
+	        { headers: { Authorization: 'Bearer '+fs.accessToken }, },
+	        function(err, rsp) {
+	        	// console.log(rsp.data.data.persons);
+
+						// Iterate over relationship path
+  	        for (var i=0; i<rsp.data.data.persons.length; i++) {
+  	        	// Determin shortest path
+  	        	let relation = rsp.data.data.persons[i].relationshipToPrevious;
+							if (relation == "WOMAN" || relation == "MAN" || relation == "SON" || relation == "DAUGHTER") {
+								if (length > i) length = i;
+							}
+
+							// Display relationship path
+		          $('.'+key).append('<li><a href="https://www.familysearch.org/tree/person/'+rsp.data.data.persons[i].personId+'" target="_blank">'+rsp.data.data.persons[i].name+" - "+rsp.data.data.persons[i].relationshipToPrevious+'</a></li>');
+        		}
+
+						// Update the bacon number
+						if (length == 99) {
+							$('.number').text("None");
+							$('.'+key).text("No relationship found");
+						}	else $('.number').text(length-1);
+				});
+			});
+    });
+
+    // Get Query parameters
+    function getQueryParams() {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for(var i = 0; i < hashes.length; i++) {
+          hash = hashes[i].split('=');
+          vars.push(hash[0]);
+          vars[hash[0]] = hash[1];
+      }
+      return vars;
+    }
+
+    // Over-ride the platform host URL so we can call tre-data which doesn't reside on api subdomain
+    fs.platformHost = function() { return "https://www.familysearch.org" }
+    </script>
+  </body>
+</html>

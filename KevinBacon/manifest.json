@@ -1,0 +1,11 @@
+{
+  "id": "sixdegrees",
+  "icon": "https://raw.githubusercontent.com/misbach/tabs/master/KevinBacon/icon.png",
+  "title": "Six Degrees",
+  "description": "How many degrees are you from Kevin Bacon",
+  "company": "Bacon Brothers, Inc.",
+  "phone": "800-555-1212",
+  "email": "info@BaconBrothers.com",
+  "url": "https://misbach.github.io/tabs/KevinBacon/index.html?pid={pid}&token={token}",
+  "support_url": "https://dnacompany.com"
+}
