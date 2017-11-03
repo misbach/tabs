@@ -1,0 +1,11 @@
+{
+  "id": "bot",
+  "icon": "https://misbach.github.io/tabs/bot/icon.jpg",
+  "title": "Leafie",
+  "description": "Converse with Leafie, our automated research assistant.",
+  "company": "Bots R Us, Inc.",
+  "phone": "800-555-1212",
+  "email": "info@bots-r-us.com",
+  "url": "https://misbach.github.io/tabs/bot/index.html?pid={pid}&token={token}",
+  "support_url": "https://example.com"
+}
