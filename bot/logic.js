@@ -11,28 +11,38 @@ var conversation = [
 // Get location
 navigator.geolocation.getCurrentPosition(function(position) {
   console.log(position.coords.latitude +" "+ position.coords.longitude);
-  let locationUrl = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude;
+  let locationUrl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude;
   $.get(locationUrl, function(rsp) {
     let location = rsp.results[rsp.results.length-3].formatted_address;
     console.log(location);
-    conversation.splice(conversation.length-5 ,0,'It looks like you are located in '+location+', Is that correct? Would you like me to tell you where the nearest family history center is?');
+    conversation.splice(conversation.length-5, 0, 'It looks like you are located in '+location+', Is that correct? Would you like me to tell you where the nearest family history center is?');
   });
 });
 
+// Get user tree person
+fs.get('/platform/tree/current-person', function(error, rsp) {
+  // console.log(rsp.headers.location);
+  fs.get(rsp.headers.location, function(error, rsp) {
+    // console.log(rsp.data);
+    let person = rsp.data.persons[0];
+    let name = person.display.name.split(" ")[0];
+    let birth = person.display.birthDate;
+    let kids = (person.display.familiesAsParent[0].children) ? person.display.familiesAsParent[0].children.length : 0;
+    let title = (person.display.gender == "Male") ? "Father" : "Mother";
 
-// Get User
+    conversation.unshift('I see you have '+kids+' children. They must be proud of their '+title);
+    conversation.unshift('Glad to hear it! It looks like you have a birthday coming up on '+birth+'. Happy Birthday!');
+    conversation.unshift('Hello '+name+'. I\'m Leafie, your automated research assistant. How are you doing today?');
+  });
+});
+
+// Get current person
 fs.get('/platform/tree/persons/'+params.pid, function(error, rsp) {
-  console.log(rsp.data.persons[0]);
-
+  // console.log(rsp.data);
   let person = rsp.data.persons[0];
-  let name = person.display.name.split(" ")[0];
-  let birth = person.display.birthDate;
-  let kids = (person.display.familiesAsParent[0].children) ? person.display.familiesAsParent[0].children.length : 0;
-  let title = (person.display.gender == "Male") ? "Father" : "Mother";
+  let name = person.display.name;
 
-  conversation.unshift('I see you have '+kids+' children. They must be proud of their '+title);
-  conversation.unshift('Glad to hear it! It looks like you have a birthday coming up on '+birth+'. Happy Birthday!');
-  conversation.unshift('Hello '+name+'. I\'m Leafie, your automated research assistant. How are you doing today?');
+  conversation.splice(conversation.length-5, 0, 'It looks like you are researching '+name+'. Can I help you find more information about this person?');
 });
 
 // Get Query parameters
