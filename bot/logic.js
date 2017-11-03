@@ -30,7 +30,7 @@ fs.get('/platform/tree/current-person', function(error, rsp) {
     let kids = (person.display.familiesAsParent[0].children) ? person.display.familiesAsParent[0].children.length : 0;
     let title = (person.display.gender == "Male") ? "Father" : "Mother";
 
-    conversation.unshift('I see you have '+kids+' children. They must be proud of their '+title);
+    conversation.unshift('I see you have '+kids+' children. They must be proud of their '+title+' ;-)');
     conversation.unshift('Glad to hear it! It looks like you have a birthday coming up on '+birth+'. Happy Birthday!');
     conversation.unshift('Hello '+name+'. I\'m Leafie, your automated research assistant. How are you doing today?');
   });
@@ -81,7 +81,7 @@ function setDate(){
   d = new Date()
   if (m != d.getMinutes()) {
     m = d.getMinutes();
-    $('<div class="timestamp">' + d.getHours() + ':' + m + '</div>').appendTo($('.message:last'));
+    $('<div class="timestamp">' + d.toTimeString().substr(0,5) + '</div>').appendTo($('.message:last'));
   }
 }
 

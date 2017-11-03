@@ -139,7 +139,7 @@ Messages
 .messages .message .timestamp {
   position: absolute;
   bottom: -15px;
-  font-size: 9px;
+  font-size: 10px;
   color: rgba(255, 255, 255, 0.3);
 }
 .messages .message::before {
@@ -278,7 +278,7 @@ Message Box
   outline: none !important;
   resize: none;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 11px;
+  font-size: 13px;
   height: 17px;
   margin: 0;
   padding-right: 20px;
